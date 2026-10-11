@@ -1,0 +1,168 @@
+# AutoNewsAnalyzer 开发环境配置
+system:
+  name: "AutoNewsAnalyzer"
+  version: "2.0.0"
+  mode: "development"
+  debug: true
+  log_level: "DEBUG"
+  data_path: "./data"
+  max_concurrent_tasks: 5
+  enable_health_check: true
+
+crawler:
+  enabled: true
+  use_mock_data: true
+  mock_data_count: 10
+  sources:
+    - name: "MockTechNews"
+      type: "mock"
+      enabled: true
+      description: "模拟科技新闻数据源"
+    - name: "MockFinanceNews"
+      type: "mock"
+      enabled: true
+      description: "模拟财经新闻数据源"
+  request_timeout: 30
+  max_retries: 3
+  rate_limit_delay: 1.0
+  user_agent: "AutoNewsAnalyzer/2.0 (Development)"
+
+credibility:
+  enabled: true
+  min_score: 0.5
+  auto_learn: true
+  weights:
+    source: 0.35
+    freshness: 0.20
+    author: 0.15
+    content: 0.20
+    url: 0.10
+  thresholds:
+    high: 0.8
+    medium: 0.5
+    low: 0.0
+  source_reputation:
+    techcrunch.com: 0.9
+    arxiv.org: 0.95
+    reuters.com: 0.85
+
+knowledge:
+  enabled: true
+  extractors:
+    - "financial"
+    - "technical"
+    - "market"
+    - "sentiment"
+  graph_storage: "memory"
+  vector_storage: "memory"
+  embedding_model: "all-MiniLM-L6-v2"
+  conflict_resolution: "credibility"
+  enable_inference: true
+  extraction:
+    ner_model: "en_core_web_sm"
+    relation_threshold: 0.7
+    max_entities_per_doc: 50
+
+evolution:
+  enabled: true
+  learning_rate: 0.01
+  meta_cognitive: true
+  goal_setting: true
+  performance_threshold: 0.8
+  adaptation_speed: 0.1
+  feedback:
+    enabled: true
+    weight: 0.3
+    update_frequency: "daily"
+
+memory:
+  enabled: true
+  retention_policies:
+    breaking_news: 7
+    research: 180
+    fundamental: 0
+  max_storage_gb: 10
+  auto_cleanup: true
+  backup_enabled: true
+  backup_schedule: "daily"
+
+api:
+  enabled: true
+  host: "127.0.0.1"
+  port: 8080
+  workers: 2
+  cors_enabled: true
+  rate_limit: 100
+  enable_docs: true
+  docs_path: "/docs"
+  authentication:
+    enabled: false
+    method: "jwt"
+
+database:
+  postgres:
+    host: "localhost"
+    port: 5432
+    database: "autonews_dev"
+    user: "postgres"
+    password: "postgres"
+    pool_size: 5
+    max_overflow: 10
+  redis:
+    host: "localhost"
+    port: 6379
+    db: 0
+    password: ""
+    decode_responses: true
+  elasticsearch:
+    hosts:
+      - "http://localhost:9200"
+    username: ""
+    password: ""
+
+monitoring:
+  enabled: true
+  prometheus_port: 9090
+  health_check_interval: 30
+  metrics_enabled: true
+  logging_enabled: true
+  alerting_enabled: false
+  alert_rules: []
+
+testing:
+  enabled: true
+  mock_data_enabled: true
+  test_timeout: 30
+  coverage_enabled: true
+  integration_tests: true
+  performance_tests: false
+  test_data:
+    path: "./tests/data"
+    sample_size: 100
+
+logging:
+  console:
+    enabled: true
+    level: "DEBUG"
+    format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file:
+    enabled: true
+    level: "INFO"
+    format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    path: "./data/logs/development.log"
+    max_size: "100MB"
+    backup_count: 10
+
+features:
+  realtime_processing: false
+  batch_processing: true
+  stream_processing: false
+  cache_enabled: true
+  cache_ttl: 3600
+  batch_size: 100
+
+metadata:
+  created_at: "2024-01-01T00:00:00"
+  created_by: "AutoNewsAnalyzer Team"
+  description: "开发环境配置"
+  version: "1.0.0"

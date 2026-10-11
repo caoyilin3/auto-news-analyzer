@@ -1,0 +1,263 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "autonews-analyzer"
+version = "2.0.0"
+description = "An autonomous AI-driven news analysis system with self-evolution capabilities"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+authors = [
+    {name = "AutoNewsAnalyzer Team", email = "team@autonews.dev"}
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Internet :: WWW/HTTP :: Indexing/Search",
+    "Topic :: Text Processing :: Linguistic",
+]
+keywords = ["news", "ai", "nlp", "knowledge-graph", "self-evolving", "autonomous"]
+dependencies = [
+    # Web框架
+    "fastapi>=0.104.1",
+    "uvicorn[standard]>=0.24.0",
+    "jinja2>=3.1.2",
+    
+    # 数据处理
+    "pydantic>=2.5.0",
+    "pandas>=2.1.3",
+    "numpy>=1.26.2",
+    "scikit-learn>=1.3.2",
+    "scipy>=1.11.4",
+    
+    # NLP处理
+    "spacy>=3.7.2",
+    "transformers>=4.36.0",
+    "torch>=2.1.1",
+    "sentence-transformers>=2.2.2",
+    "nltk>=3.8.1",
+    "langdetect>=1.0.9",
+    
+    # 知识图谱
+    "networkx>=3.2.1",
+    "rdflib>=7.0.0",
+    "py2neo>=2021.2.0",
+    
+    # 数据库
+    "sqlalchemy>=2.0.23",
+    "psycopg2-binary>=2.9.9",
+    "redis>=5.0.1",
+    "elasticsearch>=8.10.0",
+    
+    # 异步任务
+    "celery>=5.3.4",
+    "dramatiq>=1.15.0",
+    
+    # 网络请求
+    "requests>=2.31.0",
+    "aiohttp>=3.9.1",
+    "httpx>=0.25.2",
+    "beautifulsoup4>=4.12.2",
+    "lxml>=4.9.3",
+    
+    # 配置管理
+    "pyyaml>=6.0.1",
+    "python-dotenv>=1.0.0",
+    "dynaconf>=3.2.0",
+    
+    # 监控与日志
+    "prometheus-client>=0.19.0",
+    "structlog>=23.2.0",
+    "loguru>=0.7.2",
+    
+    # 命令行
+    "click>=8.1.7",
+    "rich>=13.7.0",
+    "tqdm>=4.66.1",
+    
+    # 工具库
+    "tenacity>=8.2.3",
+    "cachetools>=5.3.2",
+    "joblib>=1.3.2",
+    "python-dateutil>=2.8.2",
+    "pytz>=2023.3",
+    
+    # 机器学习扩展
+    "xgboost>=2.0.2",
+    "lightgbm>=4.1.0",
+    "catboost>=1.2.2",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.3",
+    "pytest-cov>=4.1.0",
+    "pytest-asyncio>=0.21.1",
+    "pytest-mock>=3.12.0",
+    "pytest-xdist>=3.5.0",
+    "pytest-html>=4.1.1",
+    
+    "black>=23.11.0",
+    "flake8>=6.1.0",
+    "mypy>=1.7.1",
+    "isort>=5.12.0",
+    "pre-commit>=3.5.0",
+    "rope>=1.9.0",
+    
+    "jupyter>=1.0.0",
+    "ipython>=8.17.2",
+    "jupyterlab>=4.0.7",
+    "nbformat>=5.9.2",
+    
+    "sphinx>=7.2.6",
+    "sphinx-rtd-theme>=1.3.0",
+    "myst-parser>=2.0.0",
+    
+    "debugpy>=1.8.0",
+    "ipdb>=0.13.13",
+    
+    "types-redis>=4.6.0.10",
+    "types-requests>=2.31.0.10",
+    "types-pyyaml>=6.0.12.11",
+]
+
+gpu = [
+    "torch>=2.1.1",
+    "torchvision>=0.16.1",
+    "torchaudio>=2.1.1",
+    "tensorflow>=2.14.0; platform_system != 'Darwin' or platform_machine != 'arm64'",
+    "tensorflow-macos>=2.14.0; platform_system == 'Darwin' and platform_machine == 'arm64'",
+]
+
+monitoring = [
+    "grafana-client>=3.1.0",
+    "opentelemetry-api>=1.21.0",
+    "opentelemetry-sdk>=1.21.0",
+    "opentelemetry-exporter-prometheus>=0.41b0",
+    "jaeger-client>=4.4.0",
+]
+
+deployment = [
+    "docker>=6.1.3",
+    "docker-compose>=2.23.0",
+    "kubernetes>=28.1.0",
+    "boto3>=1.34.0",
+    "azure-identity>=1.15.0",
+    "google-cloud-storage>=2.13.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/yourusername/autonews-analyzer"
+Documentation = "https://autonews.dev/docs"
+Repository = "https://github.com/yourusername/autonews-analyzer.git"
+Changelog = "https://github.com/yourusername/autonews-analyzer/releases"
+Issues = "https://github.com/yourusername/autonews-analyzer/issues"
+
+[project.scripts]
+autonews = "main:main"
+autonews-cli = "src.interfaces.cli.cli:main"
+autonews-api = "src.interfaces.api.server:run"
+autonews-crawler = "src.data_acquisition.crawler:main"
+autonews-evolve = "src.evolution.evolution_manager:main"
+
+[tool.black]
+line-length = 88
+target-version = ['py38']
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+profile = "black"
+line_length = 88
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+ensure_newline_before_comments = true
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "--strict-markers",
+    "--strict-config",
+    "--tb=short",
+    "--durations=10",
+    "-v",
+]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: integration tests",
+    "performance: performance tests",
+    "unit: unit tests",
+]
+
+[tool.coverage.run]
+source = ["src"]
+omit = [
+    "*/tests/*",
+    "*/migrations/*",
+    "*/__pycache__/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]
+
+[project.entry-points."console_scripts"]
+autonews = "main:main"
+autonews-cli = "src.interfaces.cli.cli:main"
+autonews-api = "src.interfaces.api.server:run"
+autonews-crawler = "src.data_acquisition.crawler:main"
+autonews-evolve = "src.evolution.evolution_manager:main"

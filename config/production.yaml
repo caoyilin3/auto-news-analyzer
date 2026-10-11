@@ -1,0 +1,252 @@
+# AutoNewsAnalyzer 生产环境配置
+system:
+  name: "AutoNewsAnalyzer"
+  version: "2.0.0"
+  mode: "production"
+  debug: false
+  log_level: "INFO"
+  data_path: "/data/autonews"
+  max_concurrent_tasks: 20
+  enable_health_check: true
+
+crawler:
+  enabled: true
+  use_mock_data: false
+  mock_data_count: 0
+  sources:
+    - name: "TechCrunch"
+      type: "rss"
+      url: "https://techcrunch.com/feed/"
+      enabled: true
+      update_frequency: "hourly"
+      weight: 0.9
+    - name: "ArXiv (CS)"
+      type: "rss"
+      url: "https://arxiv.org/rss/cs"
+      enabled: true
+      update_frequency: "daily"
+      weight: 0.95
+    - name: "Reuters Tech"
+      type: "rss"
+      url: "https://www.reutersagency.com/feed/?best-topics=tech&post_type=best"
+      enabled: true
+      update_frequency: "hourly"
+      weight: 0.85
+  request_timeout: 30
+  max_retries: 5
+  rate_limit_delay: 2.0
+  user_agent: "AutoNewsAnalyzer/2.0 (Production; +https://autonews.dev/bot)"
+
+credibility:
+  enabled: true
+  min_score: 0.7
+  auto_learn: true
+  weights:
+    source: 0.35
+    freshness: 0.20
+    author: 0.15
+    content: 0.20
+    url: 0.10
+  thresholds:
+    high: 0.8
+    medium: 0.5
+    low: 0.0
+  source_reputation:
+    techcrunch.com: 0.9
+    arxiv.org: 0.95
+    reuters.com: 0.85
+    bloomberg.com: 0.9
+    nature.com: 0.95
+    science.org: 0.95
+
+knowledge:
+  enabled: true
+  extractors:
+    - "financial"
+    - "technical"
+    - "market"
+    - "sentiment"
+    - "legal"
+  graph_storage: "postgres"
+  vector_storage: "elasticsearch"
+  embedding_model: "all-MiniLM-L6-v2"
+  conflict_resolution: "credibility"
+  enable_inference: true
+  extraction:
+    ner_model: "en_core_web_lg"
+    relation_threshold: 0.8
+    max_entities_per_doc: 100
+  storage:
+    backup_enabled: true
+    backup_schedule: "daily"
+    retention_days: 30
+
+evolution:
+  enabled: true
+  learning_rate: 0.001
+  meta_cognitive: true
+  goal_setting: true
+  performance_threshold: 0.85
+  adaptation_speed: 0.05
+  feedback:
+    enabled: true
+    weight: 0.2
+    update_frequency: "weekly"
+  monitoring:
+    enabled: true
+    metrics_collection: true
+    anomaly_detection: true
+
+memory:
+  enabled: true
+  retention_policies:
+    breaking_news: 7
+    research: 180
+    fundamental: 0
+  max_storage_gb: 1000
+  auto_cleanup: true
+  backup_enabled: true
+  backup_schedule: "daily"
+  compression:
+    enabled: true
+    algorithm: "gzip"
+    level: 6
+
+api:
+  enabled: true
+  host: "0.0.0.0"
+  port: 8080
+  workers: 8
+  cors_enabled: true
+  rate_limit: 1000
+  enable_docs: false
+  docs_path: "/docs"
+  authentication:
+    enabled: true
+    method: "jwt"
+    token_expiry: 3600
+  ssl:
+    enabled: true
+    cert_file: "/etc/ssl/certs/autonews.crt"
+    key_file: "/etc/ssl/private/autonews.key"
+
+database:
+  postgres:
+    host: "postgres-production"
+    port: 5432
+    database: "autonews_production"
+    user: "autonews_user"
+    password: "${POSTGRES_PASSWORD}"
+    pool_size: 20
+    max_overflow: 40
+    ssl_mode: "require"
+    connect_timeout: 10
+  redis:
+    host: "redis-production"
+    port: 6379
+    db: 0
+    password: "${REDIS_PASSWORD}"
+    decode_responses: true
+    ssl: true
+  elasticsearch:
+    hosts:
+      - "https://elasticsearch-production:9200"
+    username: "elastic"
+    password: "${ELASTICSEARCH_PASSWORD}"
+    ca_certs: "/etc/ssl/certs/ca-certificates.crt"
+
+monitoring:
+  enabled: true
+  prometheus_port: 9090
+  health_check_interval: 10
+  metrics_enabled: true
+  logging_enabled: true
+  alerting_enabled: true
+  alert_rules:
+    - name: "high_error_rate"
+      condition: "error_rate > 0.05"
+      severity: "critical"
+      message: "系统错误率超过5%"
+    - name: "high_latency"
+      condition: "response_time > 2000"
+      severity: "warning"
+      message: "API响应时间超过2秒"
+    - name: "low_credibility_score"
+      condition: "avg_credibility_score < 0.6"
+      severity: "warning"
+      message: "平均可信度分数低于0.6"
+
+security:
+  encryption:
+    enabled: true
+    algorithm: "AES-256-GCM"
+  rate_limiting:
+    enabled: true
+    requests_per_minute: 100
+    burst_size: 20
+  authentication:
+    required: true
+    timeout: 3600
+    refresh_token: true
+  audit_logging:
+    enabled: true
+    retention_days: 90
+
+logging:
+  console:
+    enabled: false
+    level: "WARNING"
+    format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file:
+    enabled: true
+    level: "INFO"
+    format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s - %(pathname)s:%(lineno)d"
+    path: "/var/log/autonews/production.log"
+    max_size: "1GB"
+    backup_count: 50
+    compression: "gzip"
+  syslog:
+    enabled: true
+    address: "/dev/log"
+    facility: "local0"
+    level: "ERROR"
+
+features:
+  realtime_processing: true
+  batch_processing: true
+  stream_processing: true
+  cache_enabled: true
+  cache_ttl: 7200
+  batch_size: 500
+  parallel_processing: true
+  max_parallel_tasks: 10
+
+performance:
+  timeout: 30
+  max_retries: 3
+  connection_pool_size: 20
+  thread_pool_size: 50
+  memory_limit: "4GB"
+  cpu_limit: 4
+
+scaling:
+  auto_scaling: true
+  min_instances: 2
+  max_instances: 10
+  scale_up_threshold: 0.8
+  scale_down_threshold: 0.3
+  cooldown_period: 300
+
+maintenance:
+  auto_update: true
+  update_window: "02:00-04:00"
+  backup_window: "01:00-02:00"
+  cleanup_enabled: true
+  cleanup_schedule: "daily"
+
+metadata:
+  created_at: "2024-01-01T00:00:00"
+  created_by: "AutoNewsAnalyzer Team"
+  description: "生产环境配置"
+  version: "1.0.0"
+  environment: "production"

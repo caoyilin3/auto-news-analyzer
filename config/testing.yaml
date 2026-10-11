@@ -1,0 +1,187 @@
+# AutoNewsAnalyzer 测试环境配置
+system:
+  name: "AutoNewsAnalyzer"
+  version: "2.0.0"
+  mode: "testing"
+  debug: true
+  log_level: "DEBUG"
+  data_path: "./data/test"
+  max_concurrent_tasks: 2
+  enable_health_check: false
+
+crawler:
+  enabled: true
+  use_mock_data: true
+  mock_data_count: 50
+  sources:
+    - name: "TestSource1"
+      type: "mock"
+      enabled: true
+      weight: 1.0
+    - name: "TestSource2"
+      type: "mock"
+      enabled: true
+      weight: 0.8
+  request_timeout: 5
+  max_retries: 1
+  rate_limit_delay: 0.1
+  user_agent: "AutoNewsAnalyzer/2.0 (Testing)"
+
+credibility:
+  enabled: true
+  min_score: 0.3
+  auto_learn: false
+  weights:
+    source: 0.35
+    freshness: 0.20
+    author: 0.15
+    content: 0.20
+    url: 0.10
+  thresholds:
+    high: 0.8
+    medium: 0.5
+    low: 0.0
+  source_reputation: {}
+
+knowledge:
+  enabled: true
+  extractors:
+    - "financial"
+    - "technical"
+  graph_storage: "memory"
+  vector_storage: "memory"
+  embedding_model: "all-MiniLM-L6-v2"
+  conflict_resolution: "timestamp"
+  enable_inference: false
+  extraction:
+    ner_model: "en_core_web_sm"
+    relation_threshold: 0.5
+    max_entities_per_doc: 20
+
+evolution:
+  enabled: false
+  learning_rate: 0.0
+  meta_cognitive: false
+  goal_setting: false
+  performance_threshold: 0.0
+  adaptation_speed: 0.0
+  feedback:
+    enabled: false
+    weight: 0.0
+    update_frequency: "never"
+
+memory:
+  enabled: false
+  retention_policies:
+    breaking_news: 1
+    research: 7
+    fundamental: 0
+  max_storage_gb: 1
+  auto_cleanup: true
+  backup_enabled: false
+
+api:
+  enabled: false
+  host: "127.0.0.1"
+  port: 8081
+  workers: 1
+  cors_enabled: true
+  rate_limit: 1000
+  enable_docs: true
+  docs_path: "/docs"
+  authentication:
+    enabled: false
+
+database:
+  postgres:
+    host: "localhost"
+    port: 5432
+    database: "autonews_test"
+    user: "postgres"
+    password: "postgres"
+    pool_size: 2
+    max_overflow: 5
+  redis:
+    host: "localhost"
+    port: 6379
+    db: 1
+    password: ""
+    decode_responses: true
+  elasticsearch:
+    hosts:
+      - "http://localhost:9201"
+    username: ""
+    password: ""
+
+monitoring:
+  enabled: false
+  prometheus_port: 9091
+  health_check_interval: 60
+  metrics_enabled: false
+  logging_enabled: true
+  alerting_enabled: false
+  alert_rules: []
+
+testing:
+  enabled: true
+  mock_data_enabled: true
+  test_timeout: 10
+  coverage_enabled: true
+  integration_tests: true
+  performance_tests: true
+  test_data:
+    path: "./tests/data"
+    sample_size: 1000
+    categories:
+      - "financial"
+      - "technical"
+      - "market"
+  validation:
+    enabled: true
+    strict_mode: false
+    fail_fast: true
+
+logging:
+  console:
+    enabled: true
+    level: "DEBUG"
+    format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file:
+    enabled: true
+    level: "DEBUG"
+    format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    path: "./data/logs/test.log"
+    max_size: "10MB"
+    backup_count: 3
+
+features:
+  realtime_processing: false
+  batch_processing: true
+  stream_processing: false
+  cache_enabled: false
+  cache_ttl: 60
+  batch_size: 10
+
+test_config:
+  unit_tests: true
+  integration_tests: true
+  performance_tests: false
+  load_tests: false
+  stress_tests: false
+  data_generation:
+    enabled: true
+    num_samples: 100
+    include_edge_cases: true
+
+fixtures:
+  reset_database: true
+  clear_cache: true
+  isolation_level: "transaction"
+  parallel_execution: false
+
+metadata:
+  created_at: "2024-01-01T00:00:00"
+  created_by: "AutoNewsAnalyzer Team"
+  description: "测试环境配置"
+  version: "1.0.0"
+  test_run_id: "${TEST_RUN_ID}"
