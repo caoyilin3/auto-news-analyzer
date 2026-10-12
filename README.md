@@ -48,11 +48,6 @@ pip install -r requirements.txt
 4. 运行系统
 
 配置好 API 后，直接运行：
-
-bash
-python main.py
-或者，如果你想跑多轮分析：
-
 bash
 python main.py --cycles 2
 📚 文档
