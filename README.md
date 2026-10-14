@@ -57,7 +57,7 @@ python main.py --cycles 2
 - [可信度评估模块设计文档](docs/credibility.md)
 - [知识提取模块设计文档](docs/extraction.md)
 - [生命周期管理模块设计文档](docs/lifecycle.md)
-
+-[项目结构说明](docs/project-structure.md)
 📄 原创声明与 License
 本系统（AutoNewsAnalyzer）由 caoyilin3 独立设计并开发。
 原始仓库：https://github.com/caoyilin3/auto-news-analyzer
