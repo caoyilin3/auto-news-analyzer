@@ -36,12 +36,12 @@ AutoNewsAnalyzer 是一个具备自主进化能力的 AI 系统，能够自动�
 
 ```bash
 git clone https://github.com/caoyilin3/auto-news-analyzer.git
-```
+
 cd auto-news-analyzer
 ```
 安装依赖
-
-```bash
+```
+bash
 pip install -r requirements.txt
 ```
 配置 API（必做）
