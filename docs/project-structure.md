@@ -1,3 +1,4 @@
+```
 autonews_clean/
 ├── config/                          # 配置模块
 │   ├── schema/                      # 配置模式定义
@@ -107,3 +108,4 @@ autonews_clean/
 ├── start.bat                        # Windows 启动批处理
 ├── start.py                         # 启动脚本
 └── 如何加API.md                     # 添加 API 说明文档
+```
