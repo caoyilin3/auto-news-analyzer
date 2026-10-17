@@ -61,16 +61,12 @@ python main.py
 python main.py --cycles 2
 ```
 📚 文档
-如何重新接入大模型 API
-
-系统设计报告
-
-可信度评估模块设计文档
-
-知识提取模块设计文档
-
-生命周期管理模块设计文档
-
+- [如何重新接入大模型 API](如何加API.md)
+- [系统设计报告](docs/system-report.md)
+- [可信度评估模块设计文档](docs/credibility.md)
+- [知识提取模块设计文档](docs/extraction.md)
+- [生命周期管理模块设计文档](docs/lifecycle.md)
+- [项目结构](docs/project-structure.md)
 📄 原创声明与 License
 本系统（AutoNewsAnalyzer）由 曹依琳 独立设计并开发。
 原始仓库：https://github.com/caoyilin3/auto-news-analyzer
