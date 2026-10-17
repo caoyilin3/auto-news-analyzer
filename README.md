@@ -36,43 +36,44 @@ AutoNewsAnalyzer 是一个具备自主进化能力的 AI 系统，能够自动�
 
 ```bash
 git clone https://github.com/caoyilin3/auto-news-analyzer.git
-、、、
+```
 cd auto-news-analyzer
+```
 安装依赖
-
+```
 bash
 、、、pip install -r requirements.txt
 配置 API（必做）
-
+```
 请参阅 如何加API.md 完成配置。
-
+```
 运行系统
-
+```
 配置好 API 后，直接运行：
-
-、、、bash
+```
+```bash
 python main.py
-、、、
+```
 或者，如果你想跑多轮分析：
-
-、、、bash
+```
+```bash
 python main.py --cycles 2
-、、、
+```
 📚 文档
 如何重新接入大模型 API
-
+```
 系统设计报告
-
+```
 可信度评估模块设计文档
-
+```
 知识提取模块设计文档
-
+```
 生命周期管理模块设计文档
-
+```
 📄 原创声明与 License
 本系统（AutoNewsAnalyzer）由 曹依琳 独立设计并开发。
 原始仓库：https://github.com/caoyilin3/auto-news-analyzer
-
+```
 本项目采用 Apache License 2.0 开源。
 您可以自由使用、修改、分发本代码，但必须保留原始版权声明和 NOTICE 文件。
 禁止删除声明后声称原创。详见 LICENSE 文件。
