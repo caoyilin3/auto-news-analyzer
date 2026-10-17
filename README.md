@@ -38,14 +38,23 @@ AutoNewsAnalyzer 是一个具备自主进化能力的 AI 系统，能够自动�
 ```bash
 git clone https://github.com/caoyilin3/auto-news-analyzer.git
 cd auto-news-analyzer
-**2. 安装依赖**
+2. 安装依赖
+
+bash
 pip install -r requirements.txt
-**3. 配置 API（必做）**
+3. 配置 API（必做）
+
 请参阅 如何加API.md 完成配置。
-**4. 运行系统**
+
+4. 运行系统
+
 配置好 API 后，直接运行：
+
+bash
 python main.py
 或者，如果你想跑多轮分析：
+
+bash
 python main.py --cycles 2
 📚 文档
 如何重新接入大模型 API
