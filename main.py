@@ -63,8 +63,13 @@ def print_summary(result: dict):
     print(f"  通过评估 : {len(data.get('articles', []))}")
     print(f"  拦截文章 : {data.get('rejected_count', 0)}")
     print(f"  提取实体 : {data.get('total_entities', 0)}")
-    print(f"  提取关系 : {data.get('total_relations', 0)}"
-          f"（其中 LLM 三元组 {data.get('llm_triples', 0)}）")
+    llm_calls = data.get("llm_calls", 0)
+    llm_failures = data.get("llm_failures", 0)
+    suffix = f"（其中 LLM 三元组 {data.get('llm_triples', 0)}）"
+    if llm_failures:
+        suffix = (f"（LLM 三元组 {data.get('llm_triples', 0)}，"
+                  f"调用失败 {llm_failures}/{llm_calls}）")
+    print(f"  提取关系 : {data.get('total_relations', 0)}{suffix}")
     if changes:
         evolution_state = "已进化"
     elif data.get("reason") == "within_target_band":
@@ -80,6 +85,9 @@ def print_summary(result: dict):
     if evaluation.get("samples"):
         print(f"  长期效果 : {evaluation.get('verdict')}"
               f"（{evaluation.get('samples')} 个周期样本）")
+    if llm_failures:
+        print(f"  ⚠️ 大模型 : {str(data.get('llm_last_error', ''))[:120]}")
+        print("     已降级为规则提取，请检查 .env 中的 DEEPSEEK_API_KEY / DEEPSEEK_MODEL")
     print(f"  耗时     : {format_duration(result['metrics'].get('total_duration', 0))}")
 
 

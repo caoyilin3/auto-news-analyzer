@@ -130,18 +130,26 @@ def python_version_text() -> str:
     return f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
 
 
+# 主链路真正 import 的第三方模块（少一个都会让 `import src` 失败）
+REQUIRED_MODULES = {
+    "jieba": "jieba",
+    "networkx": "networkx",
+    "yaml": "pyyaml",
+    "requests": "requests",
+    "aiohttp": "aiohttp",
+    "numpy": "numpy",
+    "bs4": "beautifulsoup4",
+    "backoff": "backoff",
+    "packaging": "packaging",
+    "pandas": "pandas",
+    "psutil": "psutil",
+}
+
+
 def missing_packages() -> list:
     """检查主流程依赖是否可导入"""
-    checks = {
-        "jieba": "jieba",
-        "networkx": "networkx",
-        "yaml": "pyyaml",
-        "requests": "requests",
-        "aiohttp": "aiohttp",
-        "numpy": "numpy",
-    }
     missing = []
-    for module, package in checks.items():
+    for module, package in REQUIRED_MODULES.items():
         try:
             __import__(module)
         except ImportError:
@@ -356,14 +364,20 @@ def menu() -> None:
             pause()
         elif choice == "3":
             interval = input("周期间隔（秒）[3600]: ").strip() or "3600"
+            if not interval.isdigit() or int(interval) < 1:
+                print("❌ 间隔必须是正整数，已改用默认 3600")
+                interval = "3600"
             port = input("监控端口（回车默认 9090，输入 0 不开启）: ").strip()
             if port == "":
                 port = "9090"
             args = ["main.py", "--continuous", "--interval", interval]
             if port != "0":
                 args += ["--metrics-port", port]
+                endpoint = f"http://127.0.0.1:{port}/metrics"
+            else:
+                endpoint = "（已关闭，不监听端口）"
             ensure_key_or_warn()
-            print(f"\n常驻运行，Ctrl+C 结束。指标端点: http://127.0.0.1:{port}/metrics")
+            print(f"\n常驻运行，Ctrl+C 结束。指标端点: {endpoint}")
             run_command(args, "常驻运行")
             pause()
         elif choice == "4":

@@ -255,7 +255,7 @@ docker compose up -d --build
 │   ├── interfaces/         # 报告输出 + Prometheus 指标端点
 │   ├── patent_evidence/    # 专利证据采集与汇总
 │   └── utils/              # 日志、指标收集、LLM 客户端、控制台兼容
-├── tests/                  # 单元 + 集成 + 部署校验（33 个用例）
+├── tests/                  # 单元 + 集成 + 部署校验（37 个用例）
 ├── deployments/            # prometheus.yml
 ├── data/                   # 运行期数据（运行时自动生成：状态、数据集、指标、证据）
 ├── output/                 # 运行报告（运行时自动生成）
