@@ -426,15 +426,34 @@ class AutoSafetyController(SafetyController):
         
         return None
     
+    # 资源使用等级 → 百分比的经验映射
+    _RESOURCE_LEVEL_PERCENT = {"low": 30.0, "medium": 60.0, "high": 85.0, "critical": 95.0}
+
+    @classmethod
+    def _as_percent(cls, value: Any) -> float:
+        """把资源占用值归一化为百分比（兼容 30、"30%"、"low" 等写法）"""
+        if isinstance(value, bool):
+            return 0.0
+        if isinstance(value, (int, float)):
+            return float(value)
+        if isinstance(value, str):
+            key = value.strip().lower()
+            try:
+                return float(key.rstrip("%"))
+            except ValueError:
+                return cls._RESOURCE_LEVEL_PERCENT.get(key, 0.0)
+        return 0.0
+
     async def _check_technical_constraint(self, constraint: SafetyConstraint,
                                         evolution_plan: Dict[str, Any]) -> Optional[SafetyViolation]:
         """检查技术约束"""
         # 检查资源使用
         resource_usage = evolution_plan.get("resource_requirements", {})
         
-        cpu_usage = resource_usage.get("cpu", 0)
-        memory_usage = resource_usage.get("memory", 0)
-        disk_usage = resource_usage.get("disk", 0)
+        # 计划里的资源占用可能是 "low"/"medium"/"high" 之类的等级描述，需先归一化为百分比
+        cpu_usage = self._as_percent(resource_usage.get("cpu", 0))
+        memory_usage = self._as_percent(resource_usage.get("memory", 0))
+        disk_usage = self._as_percent(resource_usage.get("disk", 0))
         
         thresholds = constraint.parameters
         

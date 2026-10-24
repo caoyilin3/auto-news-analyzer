@@ -12,7 +12,6 @@ import json
 import pickle
 
 import networkx as nx
-import matplotlib.pyplot as plt
 
 from ..base import ExtractedEntity, ExtractedRelation
 
@@ -256,7 +255,14 @@ class KnowledgeGraph:
         """可视化图谱"""
         if not self.config.enable_visualization:
             return
-        
+
+        # matplotlib 仅在可视化时按需导入，避免成为主链路的硬依赖
+        try:
+            import matplotlib.pyplot as plt
+        except ImportError:
+            self.logger.warning("未安装 matplotlib，跳过图谱可视化（pip install matplotlib）")
+            return
+
         try:
             plt.figure(figsize=(12, 8))
             pos = nx.spring_layout(self.graph, seed=42)

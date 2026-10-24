@@ -10,6 +10,13 @@ import argparse
 import subprocess
 from pathlib import Path
 
+# Windows 控制台默认 GBK，输出 emoji/符号会抛 UnicodeEncodeError，这里统一切到 UTF-8
+for _stream in (sys.stdout, sys.stderr):
+    try:
+        _stream.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
+
 def print_banner():
     """Print startup banner"""
     print("╔══════════════════════════════════════════════════════════╗")
@@ -118,14 +125,16 @@ def run_test():
     subprocess.run([sys.executable, "-m", "pytest", "tests/", "-v"])
 
 def run_api():
-    """Start API server"""
-    print("🌐 Starting API server...")
-    subprocess.run([sys.executable, "main.py", "api", "--port", "8080"])
+    """Start API server（当前版本尚未提供 REST API 服务）"""
+    print("⚠️  当前版本未提供 REST API 服务（src/interfaces/api 尚未实现）")
+    print("   可用的运行方式: python main.py [--cycles N] [--no-llm]")
+    return 2
 
 def run_cli():
-    """Start command line interface"""
-    print("💻 Starting command line interface...")
-    subprocess.run([sys.executable, "main.py", "cli"])
+    """Start command line interface（当前版本使用 main.py 的命令行参数）"""
+    print("⚠️  当前版本未提供独立 CLI 子命令（src/interfaces/cli 尚未实现）")
+    print("   可用的运行方式: python main.py [--cycles N] [--no-llm]")
+    return 2
 
 def show_help():
     """Display help information"""

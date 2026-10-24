@@ -67,12 +67,20 @@ class DataAcquisitionManager:
         self.stats["sources_used"] = len({a.get("source") for a in articles})
         self.stats["last_collect"] = datetime.now().isoformat()
 
+        # 返回「本周期」统计，避免把累计值写进单周期报告
+        cycle_stats = {
+            "total_articles": len(articles),
+            "sources_used": len({a.get("source") for a in articles}),
+            "last_collect": self.stats["last_collect"],
+            "lifetime_articles": self.stats["total_articles"],
+        }
+
         self.logger.info(f"数据采集完成，共 {len(articles)} 篇文章")
         return {
             "status": "completed",
             "articles": articles,
             "total": len(articles),
-            "stats": self.stats,
+            "stats": cycle_stats,
         }
 
     def get_status(self) -> Dict[str, Any]:

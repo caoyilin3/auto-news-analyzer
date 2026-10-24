@@ -7,19 +7,17 @@ name = "autonews-analyzer"
 version = "2.0.0"
 description = "An autonomous AI-driven news analysis system with self-evolution capabilities"
 readme = "README.md"
-requires-python = ">=3.8"
-license = {text = "MIT"}
+requires-python = ">=3.10"
+license = {text = "Apache-2.0"}
 authors = [
     {name = "AutoNewsAnalyzer Team", email = "team@autonews.dev"}
 ]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Science/Research",
-    "License :: OSI Approved :: MIT License",
+    "License :: OSI Approved :: Apache Software License",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
@@ -48,6 +46,7 @@ dependencies = [
     "sentence-transformers>=2.2.2",
     "nltk>=3.8.1",
     "langdetect>=1.0.9",
+    "jieba>=0.42.1",
     
     # 知识图谱
     "networkx>=3.2.1",
@@ -70,6 +69,7 @@ dependencies = [
     "httpx>=0.25.2",
     "beautifulsoup4>=4.12.2",
     "lxml>=4.9.3",
+    "backoff>=2.2.1",
     
     # 配置管理
     "pyyaml>=6.0.1",
@@ -80,6 +80,7 @@ dependencies = [
     "prometheus-client>=0.19.0",
     "structlog>=23.2.0",
     "loguru>=0.7.2",
+    "psutil>=5.9.0",
     
     # 命令行
     "click>=8.1.7",
@@ -164,13 +165,6 @@ Repository = "https://github.com/yourusername/autonews-analyzer.git"
 Changelog = "https://github.com/yourusername/autonews-analyzer/releases"
 Issues = "https://github.com/yourusername/autonews-analyzer/issues"
 
-[project.scripts]
-autonews = "main:main"
-autonews-cli = "src.interfaces.cli.cli:main"
-autonews-api = "src.interfaces.api.server:run"
-autonews-crawler = "src.data_acquisition.crawler:main"
-autonews-evolve = "src.evolution.evolution_manager:main"
-
 [tool.black]
 line-length = 88
 target-version = ['py38']
@@ -200,7 +194,7 @@ use_parentheses = true
 ensure_newline_before_comments = true
 
 [tool.mypy]
-python_version = "3.8"
+python_version = "3.10"
 warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = true
@@ -254,10 +248,3 @@ exclude_lines = [
     "class .*\\bProtocol\\):",
     "@(abc\\.)?abstractmethod",
 ]
-
-[project.entry-points."console_scripts"]
-autonews = "main:main"
-autonews-cli = "src.interfaces.cli.cli:main"
-autonews-api = "src.interfaces.api.server:run"
-autonews-crawler = "src.data_acquisition.crawler:main"
-autonews-evolve = "src.evolution.evolution_manager:main"

@@ -7,10 +7,27 @@ from pathlib import Path
 from typing import Dict, Any, Optional
 
 # 导入配置类
-from .base import Config, SystemConfig, CredibilityConfig, KnowledgeConfig, EvolutionConfig
-from .schema.crawler import CrawlerConfig
-from .schema.credibility import CredibilitySchema
-from .schema.knowledge import KnowledgeSchema
+# 说明：.base 只依赖标准库 + pyyaml；schema/* 依赖 pydantic。二者都用 try 包裹，
+# 这样即使只装了最小依赖（无 pydantic），config.loader 也能正常导入使用。
+try:
+    from .base import Config, SystemConfig, CredibilityConfig, KnowledgeConfig, EvolutionConfig
+except Exception:  # pragma: no cover
+    Config = SystemConfig = CredibilityConfig = KnowledgeConfig = EvolutionConfig = None
+
+try:
+    from .schema.crawler import CrawlerConfig
+except Exception:  # pragma: no cover
+    CrawlerConfig = None
+
+try:
+    from .schema.credibility import CredibilitySchema
+except Exception:  # pragma: no cover
+    CredibilitySchema = None
+
+try:
+    from .schema.knowledge import KnowledgeSchema
+except Exception:  # pragma: no cover
+    KnowledgeSchema = None
 
 __version__ = "2.0.0"
 __all__ = [

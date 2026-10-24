@@ -4,7 +4,7 @@ meta_cognitive.py - 元认知控制器
 """
 
 import logging
-from typing import Dict, List, Any, Optional, Tuple, Set
+from typing import Dict, List, Any, Optional, Tuple, Set, Callable
 from dataclasses import dataclass, field, asdict
 from datetime import datetime, timedelta
 from enum import Enum, auto
@@ -144,6 +144,12 @@ class AutoMetaCognitiveController(MetaCognitiveController):
             "adaptability": []
         }
         
+        # 真实性能指标提供者（由 EvolutionManager 注入）
+        # 为空时退化为历史均值；历史也为空时返回中性值，绝不使用随机数
+        self.metrics_provider: Optional[Callable[[], Dict[str, float]]] = None
+        # 长期效果洞察提供者（由 EvolutionManager 注入）
+        self.insight_provider: Optional[Callable[[], List[str]]] = None
+        
         # 初始化
         self._initialize_self_model()
         self.logger.info(f"元认知控制器初始化完成: {system_name}")
@@ -220,18 +226,58 @@ class AutoMetaCognitiveController(MetaCognitiveController):
         }
     
     async def _collect_performance_metrics(self) -> Dict[str, float]:
-        """收集性能指标"""
-        # 这里应该从系统其他模块获取性能数据
-        # 暂时返回模拟数据
-        import random
-        
+        """收集性能指标
+
+        数据来源优先级：
+        1. 外部注入的 metrics_provider（真实运行指标）
+        2. 历史监控记录中性能指标的均值
+        3. 中性默认值（无数据时）
+        此前这里直接返回 random.uniform() 生成的随机数，导致元认知评估没有实际意义。
+        """
+        keys = ("processing_speed", "accuracy_rate", "error_rate",
+                "learning_rate", "adaptation_speed")
+
+        if self.metrics_provider is not None:
+            try:
+                provided = self.metrics_provider() or {}
+                numeric = {
+                    k: float(v) for k, v in provided.items()
+                    if isinstance(v, (int, float)) and not isinstance(v, bool)
+                }
+                if numeric:
+                    return numeric
+            except Exception as e:
+                self.logger.warning(f"读取外部性能指标失败: {e}")
+
+        recent = [
+            entry.get("performance_metrics", {})
+            for entry in list(self.performance_history)[-5:]
+            if isinstance(entry, dict)
+        ]
+        recent = [m for m in recent if m]
+        if recent:
+            averaged = {}
+            for key in keys:
+                values = [float(m[key]) for m in recent if key in m]
+                averaged[key] = round(sum(values) / len(values), 4) if values else 0.0
+            averaged["learning_rate"] = self.config.learning_rate
+            return averaged
+
         return {
-            "processing_speed": random.uniform(0.5, 1.0),
-            "accuracy_rate": random.uniform(0.7, 0.95),
-            "error_rate": random.uniform(0.01, 0.1),
+            "processing_speed": 0.0,
+            "accuracy_rate": 0.0,
+            "error_rate": 0.0,
             "learning_rate": self.config.learning_rate,
-            "adaptation_speed": random.uniform(0.3, 0.8)
+            "adaptation_speed": 0.0,
         }
+
+    def set_metrics_provider(self, provider: Optional[Callable[[], Dict[str, float]]]) -> None:
+        """注入真实性能指标来源（由进化管理器调用）"""
+        self.metrics_provider = provider
+
+    def set_insight_provider(self, provider: Optional[Callable[[], List[str]]]) -> None:
+        """注入数据驱动的洞察来源（由进化管理器调用）"""
+        self.insight_provider = provider
     
     async def _collect_resource_metrics(self) -> Dict[str, Any]:
         """收集资源指标"""
@@ -590,7 +636,19 @@ class AutoMetaCognitiveController(MetaCognitiveController):
         return goal_mapping.get(goal, 0.5)
     
     async def _gain_metacognitive_insights(self) -> List[str]:
-        """获取元认知洞察"""
+        """获取元认知洞察
+
+        优先使用长期效果评估器提供的、可由数据集复算的洞察；
+        没有数据源时才退回规则启发式。
+        """
+        if self.insight_provider is not None:
+            try:
+                provided = self.insight_provider() or []
+                if provided:
+                    return list(provided)
+            except Exception as e:
+                self.logger.warning(f"读取数据驱动洞察失败: {e}")
+
         insights = []
         
         # 洞察1：学习效率

@@ -59,7 +59,8 @@ class RelationExtractor(BaseKnowledgeExtractor):
     def extract_relations(self, text: str, entities: Optional[List[ExtractedEntity]] = None) -> List[ExtractedRelation]:
         """提取关系"""
         if not entities:
-            self.logger.warning("未提供实体列表，关系提取效果受限")
+            # 实体为空的文章很常见（如纯陈述性文本），属于正常情况而非异常
+            self.logger.debug("未提供实体列表，跳过关系提取")
             return []
         
         relations = []

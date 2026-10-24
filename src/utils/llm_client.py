@@ -20,8 +20,8 @@ class LLMClient:
         config = config or {}
         self.logger = logging.getLogger(__name__)
         self.api_key = config.get("api_key", "")
-        self.base_url = config.get("base_url", "")
-        self.model = config.get("model", "")
+        self.base_url = config.get("base_url", "https://api.deepseek.com/v1/chat/completions")
+        self.model = config.get("model", "deepseek-v4-flash")
         self.timeout = int(config.get("timeout", 60))
         self.enabled = bool(self.api_key) and bool(config.get("enabled", True))
         self.stats = {"calls": 0, "failures": 0, "triples_extracted": 0}

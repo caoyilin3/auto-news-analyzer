@@ -624,7 +624,13 @@ class MemoryManager:
         self._update_stats()
     
     def _trigger_cleanup(self):
-        """触发记忆清理"""
+        """触发记忆清理：仅在超出容量时真正执行遗忘"""
+        overflow = len(self.memories) - self.capacity
+        if overflow <= 0:
+            # 未超容量，只刷新统计（此前无条件打印“容量已达上限”，且在 5/10000 时也触发）
+            self._update_stats()
+            return
+
         print(f"Memory capacity reached ({len(self.memories)}/{self.capacity}). Triggering cleanup...")
         
         # 识别需要遗忘的记忆
@@ -633,7 +639,7 @@ class MemoryManager:
         
         memories_to_forget = forgetting_algorithm.select_memories_to_forget(
             list(self.memories.values()),
-            target_count=len(self.memories) - self.capacity + 1000  # 保留一些缓冲空间
+            target_count=overflow  # 需要腾出的槽位数（此前用 len-capacity+1000，可能算出负数）
         )
         
         # 执行遗忘

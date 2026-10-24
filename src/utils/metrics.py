@@ -63,8 +63,14 @@ class Metric:
     unit: Optional[str] = None
     
     def to_dict(self) -> Dict[str, Any]:
-        """转换为字典"""
-        return asdict(self)
+        """转换为字典（枚举值需转成字符串，否则无法 JSON 序列化）"""
+        data = asdict(self)
+        metric_type = data.get("metric_type")
+        if isinstance(metric_type, MetricType):
+            data["metric_type"] = metric_type.value
+        elif hasattr(metric_type, "value"):
+            data["metric_type"] = metric_type.value
+        return data
     
     def to_prometheus(self) -> str:
         """转换为Prometheus格式"""
@@ -577,7 +583,7 @@ class MetricsCollector:
             for name, stats in self.aggregations.items():
                 export_data["statistics"][name] = asdict(stats)
         
-        json_str = json.dumps(export_data, ensure_ascii=False, indent=2)
+        json_str = json.dumps(export_data, ensure_ascii=False, indent=2, default=str)
         
         if filepath:
             filepath = Path(filepath)

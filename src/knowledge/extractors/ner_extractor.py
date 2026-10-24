@@ -12,6 +12,9 @@ from collections import defaultdict
 import jieba
 import jieba.posseg as pseg
 
+# jieba 默认以 DEBUG 级别打印“Building prefix dict…”，会污染业务日志，统一收敛到 WARNING
+jieba.setLogLevel(logging.WARNING)
+
 from .base_extractor import BaseKnowledgeExtractor
 from ..base import ExtractedEntity, KnowledgeExtractionConfig
 
@@ -104,13 +107,23 @@ class NERExtractor(BaseKnowledgeExtractor):
     
     def _jieba_flag_to_label(self, flag: str, word: str) -> Optional[str]:
         """jieba标签转NER标签"""
+        # 注：nz 为“其他专名”，此前直接当作 ORG，导致“奖”“新一轮”等被错标为机构
         mapping = {
             'nr': 'PERSON',
+            'nrfg': 'PERSON',
+            'nrt': 'PERSON',
             'nt': 'ORG',
             'ns': 'LOC',
-            'nz': 'ORG'
+            'nz': 'MISC',
         }
-        return mapping.get(flag)
+        label = mapping.get(flag)
+        if label is None:
+            return None
+        # 过滤噪声：单字词与纯标点/空白不构成命名实体
+        stripped = word.strip()
+        if len(stripped) < 2 or not re.search(r'[\w\u4e00-\u9fa5]', stripped):
+            return None
+        return label
     
     def _extract_with_patterns(self, text: str) -> List[ExtractedEntity]:
         """使用模式匹配提取"""

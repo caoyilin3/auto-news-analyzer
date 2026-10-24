@@ -1,4 +1,5 @@
 """AutoNewsAnalyzer 全链路冒烟测试：验证引擎能跑通完整工作流"""
+import os
 import sys
 import asyncio
 import logging
@@ -8,7 +9,16 @@ sys.path.insert(0, ".")
 logging.basicConfig(level=logging.INFO, format="%(levelname)s | %(name)s | %(message)s")
 
 from src.core import SystemEngine
+from src.utils.console import ensure_utf8_console
 
+ensure_utf8_console()
+
+# 先加载 .env，再构造配置（CONFIG 在模块级读取环境变量）
+from config.loader import load_env_file
+
+load_env_file()
+
+# 密钥只从环境变量读取；未配置时自动降级为纯规则提取
 CONFIG = {
     "system": {"name": "AutoNewsAnalyzer", "mode": "development", "debug": True},
     "crawler": {
@@ -25,12 +35,13 @@ CONFIG = {
     "knowledge": {
         "enabled": True,
         "graph_storage": "memory",
-        # 【API 配置位置】和 main.py 里一样，填这三项即可启用大模型
         "llm": {
-            "enabled": False,
-            "api_key": "__FILL_YOUR_API_KEY_HERE__",
-            "base_url": "__FILL_API_BASE_URL_HERE__",
-            "model": "__FILL_MODEL_NAME_HERE__",
+            "enabled": True,
+            "api_key": os.getenv("DEEPSEEK_API_KEY", "").strip(),
+            "base_url": os.getenv(
+                "DEEPSEEK_BASE_URL", "https://api.deepseek.com/v1/chat/completions"
+            ),
+            "model": os.getenv("DEEPSEEK_MODEL", "deepseek-chat"),
         },
     },
     "evolution": {"enabled": True},

@@ -143,7 +143,10 @@ class SystemStateManager:
         
         # 持久化配置
         self.persistence_enabled = self.config.get("persistence_enabled", True)
-        self.persistence_path = self.config.get("persistence_path", "./data/state")
+        # 注意：这里必须是文件路径（此前默认值是目录 ./data/state，导致 save 写成同名文件）
+        self.persistence_path = self.config.get(
+            "persistence_path", "./data/state/system_state.pkl"
+        )
         self.autosave_interval = self.config.get("autosave_interval", 300)  # 秒
         self.compaction_interval = self.config.get("compaction_interval", 3600)  # 秒
         
@@ -724,7 +727,7 @@ class SystemStateManager:
         filepath = filepath or self.persistence_path
         
         import os
-        os.makedirs(os.path.dirname(filepath), exist_ok=True)
+        os.makedirs(os.path.dirname(filepath) or ".", exist_ok=True)
         
         with self.global_lock:
             # 准备要保存的数据
@@ -797,7 +800,8 @@ class SystemStateManager:
         
         import os
         if not os.path.exists(filepath):
-            self.logger.warning(f"状态文件不存在: {filepath}")
+            # 首次运行时没有状态文件属于正常情况
+            self.logger.debug(f"状态文件不存在: {filepath}")
             return
         
         with self.global_lock:
@@ -827,6 +831,9 @@ class SystemStateManager:
                     
                     # 添加到存储
                     self.states[key] = entry
+                    # 同步补齐锁：get_state 依赖 state_locks 判断键是否存在，
+                    # 此前从文件加载的状态因为没有锁而永远读不到（get_state 恒返回 default）
+                    self.state_locks.setdefault(key, threading.RLock())
                     
                     # 添加到索引
                     self.type_index[entry.state_type].add(key)

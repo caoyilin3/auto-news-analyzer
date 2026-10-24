@@ -108,6 +108,7 @@ class KnowledgeManager:
         total_entities = 0
         total_relations = 0
         article_results = []
+        llm_triples_before = self.stats["llm_triples"]
 
         for article in articles:
             content = str(article.get("content", ""))
@@ -133,15 +134,19 @@ class KnowledgeManager:
         self.stats["entities_extracted"] += total_entities
         self.stats["relations_extracted"] += total_relations
 
+        # 返回本周期新增的 LLM 三元组（stats 里是跨周期累计值）
+        cycle_llm_triples = self.stats["llm_triples"] - llm_triples_before
+
         self.logger.info(
             f"知识提取完成：实体 {total_entities} 个，关系 {total_relations} 条"
-            f"（LLM 三元组 {self.stats['llm_triples']} 个）"
+            f"（LLM 三元组 {cycle_llm_triples} 个）"
         )
         return {
             "status": "completed",
             "total_entities": total_entities,
             "total_relations": total_relations,
-            "llm_triples": self.stats["llm_triples"],
+            "llm_triples": cycle_llm_triples,
+            "llm_triples_total": self.stats["llm_triples"],
             "articles_processed": len(article_results),
             "article_results": article_results,
             "graph_stats": self.graph.get_statistics() if hasattr(self.graph, "get_statistics") else None,

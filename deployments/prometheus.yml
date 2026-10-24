@@ -1,0 +1,21 @@
+# Prometheus 抓取配置
+# 宿主或容器中通过 --metrics-port 9090 暴露 /metrics 后即可被本配置抓取
+
+global:
+  scrape_interval: 30s
+  evaluation_interval: 30s
+  external_labels:
+    monitor: autonews-analyzer
+
+scrape_configs:
+  # 主应用自带的 /metrics 端点（由 src/interfaces/metrics_server.py 提供）
+  - job_name: autonews-analyzer
+    metrics_path: /metrics
+    static_configs:
+      - targets: ["autonews-analyzer:9090"]
+        labels:
+          service: autonews-analyzer
+
+  - job_name: prometheus
+    static_configs:
+      - targets: ["localhost:9090"]

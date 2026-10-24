@@ -1,0 +1,34 @@
+# -*- coding: utf-8 -*-
+# ============================================
+# AutoNewsAnalyzer - 主流程运行依赖（最小集）
+# ============================================
+# 只包含「跑通 main.py / run_pipeline.py / pytest」所必需的依赖。
+# 需要 spaCy / torch / transformers 等可选增强能力时，改用 requirements.txt。
+
+# 数据处理
+numpy>=1.26
+pandas>=2.1
+
+# 中文分词（知识提取规则基线）
+jieba>=0.42.1
+
+# 知识图谱
+networkx>=3.2
+
+# 网络请求（采集层 / LLM 客户端）
+requests>=2.31
+aiohttp>=3.9.1
+backoff>=2.2.1
+beautifulsoup4>=4.12.2
+lxml>=4.9.3
+
+# 配置与工具
+pyyaml>=6.0.1
+python-dotenv>=1.0.0
+psutil>=5.9.0
+packaging>=23.0
+pydantic>=2.5.0
+
+# 测试
+pytest>=7.4.3
+pytest-asyncio>=0.21.1

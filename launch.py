@@ -11,6 +11,13 @@ import threading
 import time
 from pathlib import Path
 
+# Windows 控制台默认 GBK，输出 emoji/符号会抛 UnicodeEncodeError，这里统一切到 UTF-8
+for _stream in (sys.stdout, sys.stderr):
+    try:
+        _stream.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
+
 class ServiceManager:
     """服务管理器"""
     
@@ -82,12 +89,12 @@ def check_dependencies():
     print("🔍 检查依赖...")
     
     try:
-        import yaml
-        import flask
+        import jieba
+        import aiohttp
+        import networkx
         import requests
-        import pandas
+        import yaml
         import numpy
-        import spacy
         
         print("✅ 所有Python依赖已安装")
         return True
@@ -173,13 +180,11 @@ def start_development_stack():
         "AutoNewsAnalyzer",
         f"{sys.executable} main.py --mode development"
     )
-    
-    # 4. 启动API服务器
-    manager.start_service(
-        "API Server",
-        f"{sys.executable} main.py api --port 8080"
-    )
-    
+
+    # 说明：当前版本未实现 REST API 服务（src/interfaces/api 不存在），
+    # 因此不再尝试启动 `main.py api`，避免拉起一个必然失败的进程。
+    print("ℹ️  未启动 API Server：当前版本仅提供命令行入口（main.py）")
+
     return manager
 
 def start_monitoring_stack():

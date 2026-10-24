@@ -170,13 +170,15 @@ class SystemLifecycleManager:
             signal.signal(signal.SIGINT, self._handle_shutdown_signal)
             
             # SIGTERM (终止信号)
-            signal.signal(signal.SIGTERM, self._handle_shutdown_signal)
+            if hasattr(signal, "SIGTERM"):
+                signal.signal(signal.SIGTERM, self._handle_shutdown_signal)
             
-            # SIGUSR1 (自定义信号1 - 维护模式)
-            signal.signal(signal.SIGUSR1, self._handle_maintenance_signal)
+            # SIGUSR1/SIGUSR2 仅在 Unix 上存在，Windows 下跳过（此前会导致整体注册失败）
+            if hasattr(signal, "SIGUSR1"):
+                signal.signal(signal.SIGUSR1, self._handle_maintenance_signal)
             
-            # SIGUSR2 (自定义信号2 - 恢复模式)
-            signal.signal(signal.SIGUSR2, self._handle_recovery_signal)
+            if hasattr(signal, "SIGUSR2"):
+                signal.signal(signal.SIGUSR2, self._handle_recovery_signal)
             
             self.signal_handlers_installed = True
             self.logger.debug("信号处理器已设置")
