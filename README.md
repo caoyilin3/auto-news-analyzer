@@ -65,6 +65,9 @@ python main.py --evidence-report      # 汇总专利证据并输出 JSON（不�
 python main.py --verbose              # 详细日志
 ```
 
+Windows 用户也可以直接双击 `start.bat`（Linux/macOS 用 `bash start.sh`）打开中文菜单：
+输入 / 更新 API Key、选择运行方式、查看评估与证据，不用记命令。
+
 ### 命令行参数
 
 | 参数 | 说明 |
@@ -117,6 +120,20 @@ export DEEPSEEK_API_KEY="sk-..."
 ```bash
 python -m pytest tests/ -q
 ```
+
+### 一键部署
+
+```bash
+# Windows
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts\deploy.ps1
+# Linux / macOS
+bash scripts/deploy.sh
+```
+
+脚本是幂等的：创建 `.venv` → 安装 `requirements-core.txt` → 生成 `.env`（不覆盖已有）→ 跑测试 → 冒烟运行。
+需要常驻启动加 `-Start` / `--start`。
+
+想让 AI Agent 自动部署？把 [docs/deploy-with-ai.md](docs/deploy-with-ai.md) 里的提示词整段复制给它即可。
 
 ## 🧩 工作流与闭环
 
@@ -238,7 +255,7 @@ docker compose up -d --build
 │   ├── interfaces/         # 报告输出 + Prometheus 指标端点
 │   ├── patent_evidence/    # 专利证据采集与汇总
 │   └── utils/              # 日志、指标收集、LLM 客户端、控制台兼容
-├── tests/                  # 单元 + 集成 + 部署校验（27 个用例）
+├── tests/                  # 单元 + 集成 + 部署校验（33 个用例）
 ├── deployments/            # prometheus.yml
 ├── data/                   # 运行期数据（运行时自动生成：状态、数据集、指标、证据）
 ├── output/                 # 运行报告（运行时自动生成）
