@@ -118,3 +118,18 @@ def test_metrics_server_renders_prometheus_text():
     assert "# TYPE autonews_learn_rate gauge" in rendered
     assert "ignored_text" not in rendered
     assert "ignored_bool" not in rendered
+
+
+def test_deploy_scripts_are_present_and_portable():
+    """部署脚本存在，且 .ps1 带 UTF-8 BOM（Windows PowerShell 5.1 需要）"""
+    ps1 = ROOT / "scripts" / "deploy.ps1"
+    sh = ROOT / "scripts" / "deploy.sh"
+    assert ps1.exists(), "缺少 scripts/deploy.ps1"
+    assert sh.exists(), "缺少 scripts/deploy.sh"
+    assert ps1.read_bytes().startswith(b"\xef\xbb\xbf"), (
+        "deploy.ps1 必须以 UTF-8 BOM 保存，否则 PowerShell 5.1 会按 GBK 解析导致语法错误"
+    )
+
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    assert "docs/deploy-with-ai.md" in readme
+    assert (ROOT / "docs" / "deploy-with-ai.md").exists()
