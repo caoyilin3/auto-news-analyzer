@@ -1,0 +1,3 @@
+timestamp,cycle_id,changed,accuracy_rate,adaptation_speed,articles,coverage,duration,error_rate,extraction_yield,learn_rate,llm_triples,passed,passed_articles,processing_speed,reject_rate,rejected,rejected_articles,relation_yield,review_rate,total_articles,credibility.theta_high,credibility.theta_low,extraction.relation_min_confidence
+2026-10-24T23:34:01.305727,wf_1792856023,1,0.8333,0.0,6.0,1.0,17.743,0.1667,10.0,0.0,21.0,5.0,5.0,1.0,0.1667,1.0,1.0,4.8,0.8333,6.0,0.78,0.5,0.5
+2026-10-24T23:49:00.936213,wf_1792856923,1,0.8333,1.0,6.0,1.0,17.7861,0.1667,9.2,0.0,19.0,5.0,5.0,1.0,0.1667,1.0,1.0,4.4,0.8333,6.0,0.76,0.5,0.5

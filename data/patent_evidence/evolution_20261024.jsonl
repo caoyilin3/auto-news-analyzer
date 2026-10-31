@@ -1,0 +1,2 @@
+{"timestamp": "2026-10-24T23:34:01.303811", "module": "credibility", "decision": "adjust credibility.theta_high", "reason": "learn 决策占比低于目标区间，放宽高置信阈值", "before_state": {"value": 0.8}, "after_state": {"value": 0.78}, "impact_score": 0.02, "system_name": "AutoNewsAnalyzer"}
+{"timestamp": "2026-10-24T23:49:00.934701", "module": "credibility", "decision": "adjust credibility.theta_high", "reason": "learn 决策占比低于目标区间，放宽高置信阈值", "before_state": {"value": 0.78}, "after_state": {"value": 0.76}, "impact_score": 0.02, "system_name": "AutoNewsAnalyzer"}

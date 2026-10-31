@@ -1,0 +1,139 @@
+{
+  "collector_name": "engine",
+  "export_time": "2026-10-24T23:49:01.823153",
+  "metrics": {
+    "articles_collected": [
+      {
+        "name": "articles_collected",
+        "metric_type": 2,
+        "value": 6,
+        "labels": {},
+        "timestamp": "2026-10-24T23:49:00.937723",
+        "description": null,
+        "unit": "articles"
+      }
+    ],
+    "articles_passed": [
+      {
+        "name": "articles_passed",
+        "metric_type": 2,
+        "value": 5,
+        "labels": {},
+        "timestamp": "2026-10-24T23:49:00.937723",
+        "description": null,
+        "unit": "articles"
+      }
+    ],
+    "articles_rejected": [
+      {
+        "name": "articles_rejected",
+        "metric_type": 2,
+        "value": 1,
+        "labels": {},
+        "timestamp": "2026-10-24T23:49:00.937723",
+        "description": null,
+        "unit": "articles"
+      }
+    ],
+    "entities_extracted": [
+      {
+        "name": "entities_extracted",
+        "metric_type": 2,
+        "value": 46,
+        "labels": {},
+        "timestamp": "2026-10-24T23:49:00.937723",
+        "description": null,
+        "unit": "entities"
+      }
+    ],
+    "relations_extracted": [
+      {
+        "name": "relations_extracted",
+        "metric_type": 2,
+        "value": 22,
+        "labels": {},
+        "timestamp": "2026-10-24T23:49:00.937723",
+        "description": null,
+        "unit": "relations"
+      }
+    ],
+    "cycle_duration": [
+      {
+        "name": "cycle_duration",
+        "metric_type": 3,
+        "value": 17.7861,
+        "labels": {},
+        "timestamp": "2026-10-24T23:49:00.937723",
+        "description": null,
+        "unit": "seconds"
+      }
+    ],
+    "learn_rate": [
+      {
+        "name": "learn_rate",
+        "metric_type": 2,
+        "value": 0.0,
+        "labels": {},
+        "timestamp": "2026-10-24T23:49:00.937723",
+        "description": null,
+        "unit": null
+      }
+    ],
+    "reject_rate": [
+      {
+        "name": "reject_rate",
+        "metric_type": 2,
+        "value": 0.1667,
+        "labels": {},
+        "timestamp": "2026-10-24T23:49:00.937723",
+        "description": null,
+        "unit": null
+      }
+    ],
+    "accuracy_rate": [
+      {
+        "name": "accuracy_rate",
+        "metric_type": 2,
+        "value": 0.8333,
+        "labels": {},
+        "timestamp": "2026-10-24T23:49:00.937723",
+        "description": null,
+        "unit": null
+      }
+    ],
+    "tunable_theta_high": [
+      {
+        "name": "tunable_theta_high",
+        "metric_type": 2,
+        "value": 0.76,
+        "labels": {},
+        "timestamp": "2026-10-24T23:49:00.937723",
+        "description": null,
+        "unit": null
+      }
+    ],
+    "tunable_theta_low": [
+      {
+        "name": "tunable_theta_low",
+        "metric_type": 2,
+        "value": 0.5,
+        "labels": {},
+        "timestamp": "2026-10-24T23:49:00.937723",
+        "description": null,
+        "unit": null
+      }
+    ],
+    "tunable_relation_min_confidence": [
+      {
+        "name": "tunable_relation_min_confidence",
+        "metric_type": 2,
+        "value": 0.5,
+        "labels": {},
+        "timestamp": "2026-10-24T23:49:00.937723",
+        "description": null,
+        "unit": null
+      }
+    ]
+  },
+  "statistics": {}
+}

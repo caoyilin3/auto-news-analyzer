@@ -1,0 +1,120 @@
+{
+  "report_id": "report_20261024234900_15pk8hqv",
+  "generated_at": "2026-10-24T23:49:00.798989",
+  "duration_text": "0.00秒",
+  "system": {
+    "name": "AutoNewsAnalyzer",
+    "mode": "development"
+  },
+  "summary": {
+    "articles_collected": 6,
+    "articles_passed": 5,
+    "articles_rejected": 1,
+    "entities_extracted": 46,
+    "relations_extracted": 22,
+    "evolved": true,
+    "adjustments": 1
+  },
+  "stages": {
+    "data_acquisition": {
+      "stats": {
+        "total_articles": 6,
+        "sources_used": 4,
+        "last_collect": "2026-10-24T23:48:43.022044",
+        "lifetime_articles": 6
+      }
+    },
+    "credibility": {
+      "total_assessed": 6,
+      "rejected": 1
+    },
+    "knowledge_extraction": {
+      "entities": 46,
+      "relations": 22,
+      "llm_triples": 19
+    },
+    "lifecycle": {
+      "added": 5
+    },
+    "evolution": {
+      "evolved": true,
+      "reason": "applied",
+      "changes": [
+        {
+          "parameter": "credibility.theta_high",
+          "after": 0.76,
+          "reason": "learn 决策占比低于目标区间，放宽高置信阈值",
+          "evidence": {
+            "learn_rate": 0.0,
+            "target_learn_rate": 0.5
+          },
+          "before": 0.78,
+          "delta": -0.02,
+          "applied_at": "2026-10-24T23:49:00.792728"
+        }
+      ],
+      "tunables": {
+        "credibility.theta_high": 0.76,
+        "credibility.theta_low": 0.5,
+        "extraction.relation_min_confidence": 0.5
+      },
+      "metrics": {
+        "accuracy_rate": 0.8333,
+        "error_rate": 0.1667,
+        "learn_rate": 0.0,
+        "review_rate": 0.8333,
+        "reject_rate": 0.1667,
+        "extraction_yield": 9.2,
+        "relation_yield": 4.4,
+        "llm_triples": 19.0,
+        "processing_speed": 1.0,
+        "adaptation_speed": 1.0,
+        "coverage": 1.0,
+        "total_articles": 6.0,
+        "passed_articles": 5.0,
+        "rejected_articles": 1.0
+      }
+    },
+    "evaluation": {
+      "samples": 1,
+      "verdict": "insufficient_data",
+      "trends": {},
+      "parameter_drift": {},
+      "insights": [
+        "数据集样本不足（1 个周期），至少需要 2 个周期才能判断趋势"
+      ]
+    },
+    "feedback": {
+      "total": 1,
+      "queue": 0,
+      "recent": [
+        {
+          "id": "fb_1792856940_0",
+          "type": "performance",
+          "priority": "medium",
+          "source": "engine",
+          "target": "evolution",
+          "timestamp": "2026-10-24T23:49:00.798989",
+          "data": {
+            "articles": 6,
+            "passed": 5,
+            "rejected": 1,
+            "entities": 46,
+            "relations": 22,
+            "evolved": true,
+            "errors": 0
+          },
+          "processed": true,
+          "processed_at": "2026-10-24T23:49:00.798989",
+          "result": {
+            "status": "processed",
+            "action": "performance_analysis",
+            "performance_score": 0.5,
+            "need_optimization": true,
+            "suggested_actions": []
+          }
+        }
+      ]
+    }
+  }
+}
